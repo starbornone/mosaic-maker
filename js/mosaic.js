@@ -13,6 +13,20 @@ var photoMosaic = function ()
         URL.revokeObjectURL(url);
 
         /**
+         * @function createCanvas
+         * @param {number} width The width of the new canvas.
+         * @param {number} height The height of the new canvas.
+         */
+        var createCanvas = function (width, height) {
+            document.createElement('canvas');
+            if (canvas.getContext) {
+                canvas.width = width;
+                canvas.height = height;
+                return canvas;
+            }
+        };
+
+        /**
          * @function renderByRow
          */
         var renderByRow = function ()
@@ -23,7 +37,7 @@ var photoMosaic = function ()
             }
             inScreenContext.drawImage(canvas, 0, imageRow, canvas.width, TILE_HEIGHT, 0, imageRow, canvas.width, TILE_HEIGHT);
             imageRow += TILE_HEIGHT;
-        }
+        };
 
         /**
          * @function pushToDoc
@@ -32,7 +46,7 @@ var photoMosaic = function ()
         {
             document.getElementById('mosaicOutput').innerHTML = '';
             document.getElementById('mosaicOutput').appendChild(inScreen);
-        }
+        };
 
         /**
          * @desc Generate coloured tiles by creating a canvas for each tile, resizing the source so that it fits that
@@ -56,7 +70,7 @@ var photoMosaic = function ()
             context.imageSmoothingEnabled = false;
             context.scale(TILE_WIDTH, TILE_HEIGHT);
             context.drawImage(smallCanvas, 0, 0);
-        }
+        };
 
         /**
          * @desc Generate an initial set of tiles to fill the image.
@@ -71,15 +85,20 @@ var photoMosaic = function ()
                     context.drawImage(svgTile, x, y)
                 }
             }
-        }
+        };
 
         /**
-         * @desc Create a canvas for the mosaic and begin getting tiles.
+         * @desc Calculate the number of tiles there will be per row and column, then determine the final width and
+         * height (it differs from the original image because the width and/or height of the uploaded image may not be
+         * divisible by the given tile sixes). Then create an off-screen canvas and an on-screen canvas and begin
+         * generating the tiles as SVGs.
          * @param {number} TILE_WIDTH
          * @param {number} TILE_HEIGHT
          * @param {number} xTileCount The number of tiles that fit within the uploaded image on the X axis
          * @param {number} yTileCount The number of tiles that fit within the uploaded image on the Y axis
-         * @param {Element} canvas Create canvas, set width and height.
+         * @param {number} outputWidth The width of the canvas that fits the entire mosaic.
+         * @param {number} outputHeight The height of the canvas that fits the entire mosaic.
+         * @param {Element} canvas Create canvas.
          * @param {CanvasRenderingContext2D} context
          * @param {Node} inScreen
          * @param {CanvasRenderingContext2D} inScreenContext
@@ -91,17 +110,16 @@ var photoMosaic = function ()
         var TILE_HEIGHT = 16;
         var xTileCount = Math.floor(image.width / TILE_WIDTH);
         var yTileCount = Math.floor(image.height / TILE_HEIGHT);
-        var canvas = document.createElement('canvas');
-        canvas.width = image.width;
-        canvas.height = image.height;
+        var outputWidth = image.width - (image.width % TILE_WIDTH);
+        var outputHeight = image.height - (image.height % TILE_HEIGHT);
+        var canvas = createCanvas(outputWidth, outputHeight);
         var context = canvas.getContext('2d');
         var inScreen = canvas.cloneNode(true);
         var inScreenContext = inScreen.getContext('2d');
         var imageRow = 0;
 
         var svgTile = new Image();
-        var svgTileData = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"' +
-            ' width="' + TILE_WIDTH + '" height="' + TILE_HEIGHT + '">' +
+        var svgTileData = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="' + TILE_WIDTH + '" height="' + TILE_HEIGHT + '">' +
             '<ellipse cx="50%" cy="50%" rx="50%" ry="50%"></ellipse>' +
             '</svg>';
         svgTile.onload = function ()
@@ -122,7 +140,7 @@ var photoMosaic = function ()
     var image = new Image();
     image.onload = renderMosaic;
     image.src = url;
-}
+};
 
 /**
  * @desc Image upload triggers photo mosaic process.
@@ -130,4 +148,4 @@ var photoMosaic = function ()
 window.onload = function ()
 {
     document.getElementById('imageInput').onchange = photoMosaic
-}
+};
