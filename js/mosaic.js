@@ -18,7 +18,7 @@ var photoMosaic = function ()
          * @param {number} height The height of the new canvas.
          */
         var createCanvas = function (width, height) {
-            document.createElement('canvas');
+            var canvas = document.createElement('canvas');
             if (canvas.getContext) {
                 canvas.width = width;
                 canvas.height = height;
@@ -106,8 +106,8 @@ var photoMosaic = function ()
          * @param svgShape
          * @param svgData
          */
-        var TILE_WIDTH = 16;
-        var TILE_HEIGHT = 16;
+        var TILE_WIDTH = parseInt(document.getElementById('tileWidth').value);
+        var TILE_HEIGHT = parseInt(document.getElementById('tileHeight').value);
         var xTileCount = Math.floor(image.width / TILE_WIDTH);
         var yTileCount = Math.floor(image.height / TILE_HEIGHT);
         var outputWidth = image.width - (image.width % TILE_WIDTH);

@@ -13,10 +13,22 @@
     <h1>Mosaic Maker</h1>
 
     <form id="form" method="post" action="mosaic.html">
-        <label class="file">
-            <input type="file" id="imageInput">
-            <span class="file-custom"></span>
-        </label>
+        <div id="options">
+            <div class="col">
+                <label for="tileWidth">Tile Width</label><br/>
+                <input class="form-control" type="number" value="12" id="tileWidth">
+            </div>
+            <div class="col">
+                <label for="tileHeight">Tile Height</label><br/>
+                <input class="form-control" type="number" value="12" id="tileHeight">
+            </div>
+        </div>
+        <div id="upload">
+            <label class="file">
+                <input type="file" id="imageInput">
+                <span class="file-custom"></span>
+            </label>
+        </div>
     </form>
 
     <div id="mosaicOutput">

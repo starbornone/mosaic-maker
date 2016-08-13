@@ -19,22 +19,54 @@ h1 {
     font-size: 3em;
 }
 
+label {
+    display: inline-block;
+}
+
+button, input, select, textarea {
+    margin: 0;
+    line-height: inherit;
+    border-radius: 0;
+    font: inherit;
+}
+
 #container {
     width: 100%;
     text-align: center
 }
 
 #form {
-    padding: 2rem
-}
-
-#mosaicOutput {
-    padding: 2rem;
-}
-
-#mosaicOutput canvas {
     padding: 1rem;
-    background-color: #fff
+}
+
+#options {
+    width: 270px;
+    margin: 0 auto;
+}
+
+.col {
+    float: left;
+    padding-right: 15px;
+    padding-left: 15px;
+    text-align: center;
+}
+
+#upload {
+    padding-top: 15px;
+    clear: both;
+}
+
+.form-control {
+    width: 75px;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #555;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: .25rem;
 }
 
 .file {
@@ -80,10 +112,9 @@ h1 {
 
 .file-custom::before {
     position: absolute;
-    top: -.075rem;
-    right: -.075rem;
-    bottom: -.075rem;
-    z-index: 6;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
     display: block;
     height: 2.5rem;
     padding: .5rem 1rem;
@@ -93,4 +124,13 @@ h1 {
     background-color: #ccc;
     border: 1px solid #aaa;
     border-radius: 0 .25rem .25rem 0
+}
+
+#mosaicOutput {
+    padding: 2rem;
+}
+
+#mosaicOutput canvas {
+    padding: 1rem;
+    background-color: #fff
 }
