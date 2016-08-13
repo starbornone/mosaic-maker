@@ -2,106 +2,28 @@
 <html>
 <head>
     <script type="text/javascript" src="js/mosaic.js"></script>
-    <script type="text/javascript" src="js/client.js"></script>
-    <title>Mosaic</title>
-    <style type="text/css">
-        body {
-            margin: 0;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 1rem;
-            line-height: 1.5;
-            color: #373a3c;
-            background-color: #eee
-        }
-
-        #container {
-            width: 100%;
-            text-align: center
-        }
-
-        #form {
-            padding: 4rem 2rem 2rem 2rem
-        }
-
-        #mosaicOutput {
-            padding: 2rem 2rem 4rem 2rem;
-        }
-
-        #mosaicOutput canvas {
-            padding: 1rem;
-            background-color: #fff
-        }
-
-        .file {
-            position: relative;
-            display: inline-block;
-            height: 2.5rem;
-            cursor: pointer
-        }
-
-        .file input {
-            min-width: 14rem;
-            margin: 0;
-            filter: alpha(opacity=0);
-            opacity: 0;
-            font: inherit;
-            color: inherit;
-            line-height: normal
-        }
-
-        .file-custom {
-            position: absolute;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: 5;
-            height: 2.5rem;
-            padding: .5rem 1rem;
-            line-height: 2.5;
-            color: #555;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            background-color: #fff;
-            border: 1px solid #aaa;
-            border-radius: .25rem;
-            text-align: left
-        }
-
-        .file-custom::after {
-            content: "Choose image..."
-        }
-
-        .file-custom::before {
-            position: absolute;
-            top: -.075rem;
-            right: -.075rem;
-            bottom: -.075rem;
-            z-index: 6;
-            display: block;
-            height: 2.5rem;
-            padding: .5rem 1rem;
-            line-height: 2.5;
-            color: #555;
-            content: "Browse";
-            background-color: #ccc;
-            border: 1px solid #aaa;
-            border-radius: 0 .25rem .25rem 0
-        }
-    </style>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./css/mosaic.css">
+    <title>Mosaic Maker</title>
 </head>
 <body>
 
 <div id="container">
-    <form id="form" post="post" action="mosaic.html">
+
+    <h1>Mosaic Maker</h1>
+
+    <form id="form" method="post" action="mosaic.html">
         <label class="file">
             <input type="file" id="imageInput">
             <span class="file-custom"></span>
         </label>
     </form>
+
     <div id="mosaicOutput">
     </div>
+
+    <a href="https://github.com/Sha-KB/Mosaic-Maker" target="_blank">https://github.com/Sha-KB/Mosaic-Maker</a>
+
 </div>
 
 </body>
