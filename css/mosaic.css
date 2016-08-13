@@ -45,6 +45,14 @@ a:focus, a:hover {
     text-align: center
 }
 
+#error {
+    padding: .5rem;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    color: #fff;
+    background-color: #d9534f;
+}
+
 #form {
     padding: 1rem;
 }
@@ -143,4 +151,12 @@ a:focus, a:hover {
 #mosaicOutput canvas {
     padding: 1rem;
     background-color: #fff
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block !important;
 }

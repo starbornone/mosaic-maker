@@ -12,15 +12,17 @@
 
     <h1>Mosaic Maker</h1>
 
+    <div id="error" class="hidden"></div>
+
     <form id="form" method="post" action="mosaic.html">
         <div id="options">
             <div class="col">
                 <label for="tileWidth">Tile Width</label><br/>
-                <input class="form-control" type="number" value="12" id="tileWidth">
+                <input class="form-control" type="number" min="0" step="1" value="12" id="tileWidth">
             </div>
             <div class="col">
                 <label for="tileHeight">Tile Height</label><br/>
-                <input class="form-control" type="number" value="12" id="tileHeight">
+                <input class="form-control" type="number" min="0" step="1" value="12" id="tileHeight">
             </div>
         </div>
         <div id="upload">
