@@ -1,18 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@500;800&display=swap");
+
 * {
+  font-family: "Lexend", sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.mosaic-page {
+body {
   margin: 0;
   padding: 2rem;
-  font-family: 'Lexend', sans-serif;
   color: rgba(55, 58, 60, 1);
   background-color: rgba(238, 238, 238, 1);
 }
 
 .mosaic {
+  margin: 2rem;
   width: 100%;
   text-align: center;
 }
@@ -20,7 +23,6 @@
 .mosaic__title {
   font-size: 3rem;
   font-weight: 800;
-  text-transform: uppercase;
   margin-bottom: 2rem;
 }
 
@@ -39,7 +41,7 @@
 
 .mosaic__form {
   padding: 2rem;
-  max-width: 31.25rem;
+  max-width: 36rem;
   margin: 0 auto;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 0.5rem;
