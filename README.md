@@ -1,3 +1,3 @@
 # Mosaic-Maker
 
-Generate a mosaic of circular tiles using an uploaded image.
+Mosaic Maker lets you create image mosaics with ease. Upload an image, configure tile dimensions, and generate your custom mosaic art in seconds.
