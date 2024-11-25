@@ -1,162 +1,211 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    padding: 2em;
-    font-family: 'Montserrat', sans-serif;
-    color: #373a3c;
-    background-color: #eee
+.mosaic-page {
+  margin: 0;
+  padding: 2rem;
+  font-family: 'Lexend', sans-serif;
+  color: rgba(55, 58, 60, 1);
+  background-color: rgba(238, 238, 238, 1);
 }
 
-h1, h2, h3, h4, h5, h6 {
-    text-transform: uppercase;
+.mosaic {
+  width: 100%;
+  text-align: center;
 }
 
-h1 {
-    font-size: 3em;
+.mosaic__title {
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
 }
 
-label {
-    display: inline-block;
+.mosaic__error {
+  display: none;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(217, 83, 79, 1);
+  border-radius: 0.25rem;
 }
 
-button, input, select, textarea {
-    margin: 0;
-    line-height: inherit;
-    border-radius: 0;
-    font: inherit;
+.mosaic__error--visible {
+  display: block;
 }
 
-a {
-    color: #0275d8;
-    text-decoration: none;
+.mosaic__form {
+  padding: 2rem;
+  max-width: 31.25rem;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
 }
 
-a:focus, a:hover {
-    color: #014c8c;
-    text-decoration: underline;
+.mosaic__options {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-#container {
-    width: 100%;
-    text-align: center
+.mosaic__column {
+  flex: 1;
 }
 
-#error {
-    padding: .5rem;
-    margin-top: .5rem;
-    margin-bottom: .5rem;
-    color: #fff;
-    background-color: #d9534f;
+.mosaic__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(55, 58, 60, 0.9);
 }
 
-#form {
-    padding: 1rem;
+.mosaic__input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: rgba(55, 58, 60, 1);
+  background-color: rgba(249, 250, 251, 1);
+  border: 0.125rem solid rgba(229, 231, 235, 1);
+  border-radius: 0.375rem;
+  transition: all 0.2s ease-in-out;
 }
 
-#options {
-    width: 270px;
-    margin: 0 auto;
+.mosaic__input:focus {
+  outline: none;
+  border-color: rgba(2, 117, 216, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(2, 117, 216, 0.25);
 }
 
-.col {
-    float: left;
-    padding-right: 15px;
-    padding-left: 15px;
-    text-align: center;
+.mosaic__upload {
+  margin-top: 2rem;
 }
 
-#upload {
-    padding-top: 15px;
-    clear: both;
+.mosaic__file {
+  position: relative;
+  display: block;
+  width: 100%;
 }
 
-.form-control {
-    width: 75px;
-    padding: .5rem .75rem;
-    font-size: 1rem;
-    line-height: 1.25;
-    color: #555;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    background-color: #fff;
-    border: 1px solid #aaa;
-    border-radius: .25rem;
+.mosaic__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.file {
-    position: relative;
-    display: inline-block;
-    height: 2.5rem;
-    cursor: pointer
+.mosaic__file-custom {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba(249, 250, 251, 1);
+  border: 0.125rem dashed rgba(229, 231, 235, 1);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
-.file input {
-    min-width: 14rem;
-    margin: 0;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    font: inherit;
-    color: inherit;
-    line-height: normal
+.mosaic__file-custom::after {
+  content: "Choose image...";
+  flex-grow: 1;
+  text-align: center;
+  color: rgba(107, 114, 128, 1);
 }
 
-.file-custom {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 5;
-    height: 2.5rem;
-    padding: .5rem 1rem;
-    line-height: 2.5;
-    color: #555;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: #fff;
-    border: 1px solid #aaa;
-    border-radius: .25rem;
-    text-align: left
+.mosaic__file-custom::before {
+  content: "Browse";
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(2, 117, 216, 1);
+  border-radius: 0.25rem;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.file-custom::after {
-    content: "Choose image..."
+.mosaic__file:hover .mosaic__file-custom {
+  border-color: rgba(2, 117, 216, 0.5);
 }
 
-.file-custom::before {
-    position: absolute;
-    top: -1px;
-    right: -1px;
-    bottom: -1px;
-    display: block;
-    height: 2.5rem;
-    padding: .5rem 1rem;
-    line-height: 2.5;
-    color: #555;
-    content: "Browse";
-    background-color: #ccc;
-    border: 1px solid #aaa;
-    border-radius: 0 .25rem .25rem 0
+.mosaic__file:hover .mosaic__file-custom::before {
+  background-color: rgba(1, 76, 140, 1);
 }
 
-#mosaicOutput {
-    padding: 2rem;
+.mosaic__file-input:focus + .mosaic__file-custom {
+  border-color: rgba(2, 117, 216, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(2, 117, 216, 0.25);
 }
 
-#mosaicOutput canvas {
-    padding: 1rem;
-    background-color: #fff
+.mosaic__output {
+  display: none;
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
 }
 
-.hidden {
-    display: none;
+.mosaic__output--visible {
+  display: block;
 }
 
-.visible {
-    display: block !important;
+.mosaic__output canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+}
+
+.mosaic__link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: rgba(2, 117, 216, 1);
+  text-decoration: none;
+}
+
+.mosaic__link:hover,
+.mosaic__link:focus {
+  color: rgba(1, 76, 140, 1);
+  text-decoration: underline;
+}
+
+.mosaic__regenerate {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(2, 117, 216, 1);
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.mosaic__regenerate:disabled {
+  background-color: rgba(204, 204, 204, 1);
+  cursor: not-allowed;
+}
+
+.mosaic__regenerate:hover:not(:disabled) {
+  background-color: rgba(1, 76, 140, 1);
+}
+
+.mosaic__regenerate:focus:not(:disabled) {
+  outline: none;
+  border: 0.0625rem solid rgba(2, 117, 216, 1);
+  box-shadow: 0 0 0 0.25rem rgba(2, 117, 216, 0.25);
 }

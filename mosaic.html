@@ -1,60 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <script type="text/javascript" src="js/mosaic.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="./css/mosaic.css">
-    <title>Mosaic Maker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mosaic Maker</title>
+  <script src="js/mosaic.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/mosaic.css">
 </head>
-<body>
 
-<div id="container">
+<body class="mosaic-page">
+  <div class="mosaic">
+    <h1 class="mosaic__title">Mosaic Maker</h1>
 
-    <h1>Mosaic Maker</h1>
+    <div class="mosaic__error" data-error></div>
 
-    <div id="error" class="hidden"></div>
-
-    <form id="form" method="post" action="mosaic.html">
-        <div id="options">
-            <div class="col">
-                <label for="tileWidth">Tile Width</label><br/>
-                <input class="form-control" type="number" min="0" step="1" value="12" id="tileWidth">
-            </div>
-            <div class="col">
-                <label for="tileHeight">Tile Height</label><br/>
-                <input class="form-control" type="number" min="0" step="1" value="12" id="tileHeight">
-            </div>
+    <form class="mosaic__form">
+      <div class="mosaic__options">
+        <div class="mosaic__column">
+          <label class="mosaic__label" for="tileWidth">Tile Width</label>
+          <input class="mosaic__input" type="number" min="0" step="1" value="12" id="tileWidth">
         </div>
-        <div id="upload">
-            <label class="file">
-                <input type="file" id="imageInput">
-                <span class="file-custom"></span>
-            </label>
+        <div class="mosaic__column">
+          <label class="mosaic__label" for="tileHeight">Tile Height</label>
+          <input class="mosaic__input" type="number" min="0" step="1" value="12" id="tileHeight">
         </div>
+      </div>
+
+      <div class="mosaic__upload">
+        <label class="mosaic__file">
+          <input class="mosaic__file-input" type="file" id="imageInput" accept="image/*">
+          <span class="mosaic__file-custom"></span>
+        </label>
+      </div>
+
+      <button type="button" class="mosaic__regenerate" data-regenerate disabled>
+        Regenerate Mosaic
+      </button>
     </form>
 
-    <div id="mosaicOutput">
-    </div>
+    <div class="mosaic__output" data-output></div>
 
-    <a href="https://github.com/Sha-KB/Mosaic-Maker" target="_blank">https://github.com/Sha-KB/Mosaic-Maker</a>
-
-</div>
-
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-24430613-4', 'auto');
-    ga('send', 'pageview');
-</script>
-
+    <a class="mosaic__link" href="https://github.com/Sha-KB/Mosaic-Maker" target="_blank" rel="noopener noreferrer">
+      View on GitHub
+    </a>
+  </div>
 </body>
+
 </html>
