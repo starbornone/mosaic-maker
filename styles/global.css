@@ -160,3 +160,25 @@ body {
 .mosaic__error {
   color: rgba(255, 0, 0, 1);
 }
+
+footer {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0.5rem;
+  border: 0.063rem solid rgba(221, 221, 221, 0.5);
+  color: rgba(85, 85, 85, 1);
+  font-size: 0.875rem;
+  margin: 1.5rem auto;
+  max-width: 36rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+footer a {
+  color: rgba(2, 117, 216, 1);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: rgba(0, 92, 181, 1);
+  text-decoration: underline;
+}

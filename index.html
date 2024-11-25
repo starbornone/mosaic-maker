@@ -7,6 +7,9 @@
   <title>Mosaic Maker</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles/global.css">
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+
 </head>
 
 <body>
@@ -34,7 +37,7 @@
           <input class="mosaic__file-input" type="file" id="imageInput" accept="image/*" />
           <span class="mosaic__file-label">Upload Image</span>
         </label>
-        <p class="mosaic__filename" data-filename>No file selected</p>
+        <p class="mosaic__filename" data-filename>No file selected.</p>
       </div>
 
       <button type="button" class="mosaic__button" data-regenerate disabled>Regenerate Mosaic</button>
@@ -44,6 +47,15 @@
   </div>
 
   <div class="mosaic__output" data-output></div>
+
+  <footer>
+    <div>
+      Mosaic Maker by <a href="https://sha.codes/" target="_blank">Sha</a>. Check out the repo on <a
+        href="https://github.com/starbornone/mosaic-maker" target="_blank">GitHub</a> or the CodePen <a
+        href="https://codepen.io/starborn/pen/KwPPNXv" target="_blank">demo</a>.
+      Mosaic favicon created by <a href="https://www.flaticon.com/free-icons/mosaic" target="_blank">Freepik</a>.
+    </div>
+  </footer>
 
   <script src="js/mosaic.js"></script>
 </body>
