@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mosaic Maker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/global.css">
+</head>
+
+<body>
+
+  <div class="mosaic__container">
+    <div class="mosaic__description">
+      <h1 class="mosaic__title">Mosaic Maker</h1>
+      <p class="mosaic__intro">Create mosaics by uploading an image and setting tile configurations.</p>
+    </div>
+
+    <form class="mosaic__form">
+      <div class="mosaic__config">
+        <div class="mosaic__field">
+          <label class="mosaic__label" for="tileWidth">Tile Width</label>
+          <input class="mosaic__input" type="number" min="1" id="tileWidth" value="12" />
+        </div>
+        <div class="mosaic__field">
+          <label class="mosaic__label" for="tileHeight">Tile Height</label>
+          <input class="mosaic__input" type="number" min="1" id="tileHeight" value="12" />
+        </div>
+      </div>
+
+      <div class="mosaic__upload">
+        <label class="mosaic__file">
+          <input class="mosaic__file-input" type="file" id="imageInput" accept="image/*" />
+          <span class="mosaic__file-label">Upload Image</span>
+        </label>
+        <p class="mosaic__filename" data-filename>No file selected</p>
+      </div>
+
+      <button type="button" class="mosaic__button" data-regenerate disabled>Regenerate Mosaic</button>
+    </form>
+
+    <div class="mosaic__error" data-error></div>
+  </div>
+
+  <div class="mosaic__output" data-output></div>
+
+  <script src="js/mosaic.js"></script>
+</body>
+
+</html>
