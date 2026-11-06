@@ -2,10 +2,16 @@ class MosaicMaker {
   constructor() {
     this.errorElement = document.querySelector("[data-error]");
     this.outputElement = document.querySelector("[data-output]");
+    this.canvasHost = document.querySelector("[data-canvas]");
+    this.cropElement = document.querySelector("[data-crop]");
+    this.downloadLink = document.querySelector("[data-download]");
     this.regenerateButton = document.querySelector("[data-regenerate]");
+    this.fileNameElement = document.querySelector("[data-filename]");
     this.currentImage = null;
+    this.renderToken = 0;
+    this.shownToken = 0;
+    this.downloadUrl = null;
 
-    // Warn if useful elements are missing to aid debugging
     if (!this.errorElement) {
       console.warn("[MosaicMaker] Warning: No element found for data-error.");
     }
@@ -21,18 +27,18 @@ class MosaicMaker {
     this.init();
   }
 
-  /**
-   * Initializes the application by attaching event listeners to DOM elements.
-   * Ensures critical elements like the file input exist.
-   */
   init() {
+    if (typeof MosaicMath !== "object") {
+      console.error("[MosaicMaker] Error: mosaic-math.js did not load.");
+      return;
+    }
+
     const imageInput = document.getElementById("imageInput");
     if (!imageInput) {
       console.error("[MosaicMaker] Error: No element found for #imageInput.");
       return;
     }
 
-    // Bind event handlers for file input and regenerate button
     imageInput.addEventListener("change", this.handleImageUpload.bind(this));
     if (this.regenerateButton) {
       this.regenerateButton.addEventListener(
@@ -40,10 +46,8 @@ class MosaicMaker {
         this.handleRegenerate.bind(this)
       );
     }
-    console.log("[MosaicMaker] Initialized.");
   }
 
-  /** Displays an error message and makes the error element visible. */
   showError(message) {
     if (!this.errorElement) {
       console.warn(
@@ -55,7 +59,6 @@ class MosaicMaker {
     this.errorElement.classList.add("mosaic__error--visible");
   }
 
-  /** Hides the error element, resetting its visibility. */
   hideError() {
     if (!this.errorElement) {
       console.warn(
@@ -63,10 +66,10 @@ class MosaicMaker {
       );
       return;
     }
+    this.errorElement.textContent = "";
     this.errorElement.classList.remove("mosaic__error--visible");
   }
 
-  /** Makes the output section visible to display the generated mosaic. */
   showOutput() {
     if (!this.outputElement) {
       console.warn(
@@ -77,21 +80,6 @@ class MosaicMaker {
     this.outputElement.classList.add("mosaic__output--visible");
   }
 
-  /** Hides the output section. */
-  hideOutput() {
-    if (!this.outputElement) {
-      console.warn(
-        "[MosaicMaker] Unable to hide output, data-output element missing."
-      );
-      return;
-    }
-    this.outputElement.classList.remove("mosaic__output--visible");
-  }
-
-  /**
-   * Creates a canvas element with the specified dimensions.
-   * Ensures browser support for the canvas API.
-   */
   createCanvas(width, height) {
     const canvas = document.createElement("canvas");
     if (canvas.getContext) {
@@ -102,10 +90,6 @@ class MosaicMaker {
     throw new Error("Canvas not supported in your browser");
   }
 
-  /**
-   * Loads an image from a given URL and ensures it is fully loaded before returning.
-   * Uses a Promise to handle asynchronous loading.
-   */
   async loadImage(url) {
     return new Promise((resolve, reject) => {
       const image = new Image();
@@ -119,123 +103,139 @@ class MosaicMaker {
     });
   }
 
-  /** Retrieves and validates the tile dimensions input by the user. */
   getTileDimensions() {
-    const width = parseInt(document.getElementById("tileWidth").value);
-    const height = parseInt(document.getElementById("tileHeight").value);
-
-    if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
-      throw new Error("Tiles should have positive dimensions.");
+    const widthInput = document.getElementById("tileWidth");
+    const heightInput = document.getElementById("tileHeight");
+    if (!widthInput || !heightInput) {
+      throw new Error("Tile size fields are missing.");
     }
 
-    return { width, height };
+    return {
+      width: MosaicMath.readTileSize(widthInput.value),
+      height: MosaicMath.readTileSize(heightInput.value),
+    };
   }
 
-  /** Validates whether the tile dimensions are smaller than the image dimensions. */
-  validateTileSize(image, tileWidth, tileHeight) {
-    if (tileWidth > image.width || tileHeight > image.height) {
-      throw new Error("Individual tiles should not be larger than the image.");
-    }
-  }
-
-  /**
-   * Handles image uploads, validates the file, and updates the UI to display the file name.
-   * Generates the mosaic after validating the image and tile dimensions.
-   */
   async handleImageUpload(event) {
-    this.hideError();
-    this.hideOutput();
-
     const file = event.target.files[0];
-    const fileNameElement = document.querySelector("[data-filename]");
+    if (!file) return;
 
-    // Update file name display or reset it if no file is selected
-    if (!file) {
-      if (fileNameElement) {
-        fileNameElement.textContent = "No file selected";
-        fileNameElement.classList.remove("mosaic__filename--visible");
-      }
-      return;
-    }
-    if (fileNameElement) {
-      fileNameElement.textContent = file.name;
-      fileNameElement.classList.add("mosaic__filename--visible");
-    }
+    // Allow choosing the same file again after a failed attempt.
+    event.target.value = "";
 
+    const token = ++this.renderToken;
+    this.hideError();
     const url = URL.createObjectURL(file);
 
     try {
       const image = await this.loadImage(url);
-      this.currentImage = image;
+      if (token !== this.renderToken) return;
 
+      this.currentImage = image;
+      if (this.fileNameElement) {
+        this.fileNameElement.textContent = file.name;
+        this.fileNameElement.classList.add("mosaic__filename--visible");
+      }
       if (this.regenerateButton) {
         this.regenerateButton.disabled = false;
       }
 
       const { width: tileWidth, height: tileHeight } = this.getTileDimensions();
-      this.validateTileSize(image, tileWidth, tileHeight);
-      await this.renderMosaic(image, tileWidth, tileHeight);
+      MosaicMath.assertTilesFit(image.width, image.height, tileWidth, tileHeight);
+      await this.renderMosaic(image, tileWidth, tileHeight, token);
     } catch (error) {
+      if (token !== this.renderToken) return;
       this.showError(error.message);
     } finally {
-      URL.revokeObjectURL(url); // Clean up memory for the object URL
+      URL.revokeObjectURL(url);
     }
   }
 
-  /**
-   * Handles regenerating the mosaic using the previously uploaded image.
-   * Ensures the current image is valid and regenerates the mosaic.
-   */
   async handleRegenerate() {
     if (!this.currentImage) {
       this.showError("No image available for regeneration.");
       return;
     }
 
+    const token = ++this.renderToken;
+
     try {
       this.hideError();
-      this.hideOutput();
       const { width: tileWidth, height: tileHeight } = this.getTileDimensions();
-      this.validateTileSize(this.currentImage, tileWidth, tileHeight);
-      await this.renderMosaic(this.currentImage, tileWidth, tileHeight);
+      MosaicMath.assertTilesFit(
+        this.currentImage.width,
+        this.currentImage.height,
+        tileWidth,
+        tileHeight
+      );
+      await this.renderMosaic(this.currentImage, tileWidth, tileHeight, token);
     } catch (error) {
+      if (token !== this.renderToken) return;
       this.showError(error.message);
     }
   }
 
-  /**
-   * Renders the mosaic on a canvas, creating and coloring tiles based on the input image.
-   * Uses helper methods to create SVG tiles and apply colors from the image.
-   */
-  async renderMosaic(image, tileWidth, tileHeight) {
-    const xTileCount = Math.floor(image.width / tileWidth);
-    const yTileCount = Math.floor(image.height / tileHeight);
-    const outputWidth = xTileCount * tileWidth;
-    const outputHeight = yTileCount * tileHeight;
+  async renderMosaic(image, tileWidth, tileHeight, token) {
+    const { xTileCount, yTileCount, outputWidth, outputHeight } =
+      MosaicMath.planMosaic(image.width, image.height, tileWidth, tileHeight);
 
     const canvas = this.createCanvas(outputWidth, outputHeight);
     const context = canvas.getContext("2d");
 
     const svgTile = await this.createSvgTile(tileWidth, tileHeight);
-    if (!svgTile) throw new Error("SVG tile could not be created.");
+    if (token !== this.renderToken) return;
 
-    await this.generateTiles(
-      canvas,
-      context,
-      svgTile,
-      xTileCount,
-      yTileCount,
-      tileWidth,
-      tileHeight
-    );
-    await this.colourTiles(canvas, context, image, xTileCount, yTileCount);
+    this.generateTiles(context, svgTile, outputWidth, outputHeight);
+    this.colourTiles(canvas, context, image, xTileCount, yTileCount);
+    if (token !== this.renderToken) return;
 
-    this.outputElement.innerHTML = ""; // Clear previous content
-    this.outputElement.appendChild(canvas);
+    if (!this.canvasHost) {
+      throw new Error("Mosaic output is missing.");
+    }
+
+    this.canvasHost.replaceChildren(canvas);
+    this.shownToken = token;
+    this.updateCropNote(image, outputWidth, outputHeight);
+    this.resetDownload();
     this.showOutput();
+    this.offerDownload(canvas, token);
   }
 
-  /** Creates an SVG tile as an image element that can be drawn on a canvas. */
+  updateCropNote(image, outputWidth, outputHeight) {
+    if (!this.cropElement) return;
+
+    const note = MosaicMath.formatCropNote(
+      image.width,
+      image.height,
+      outputWidth,
+      outputHeight
+    );
+    this.cropElement.textContent = note;
+    this.cropElement.classList.toggle("mosaic__crop--visible", note !== "");
+  }
+
+  resetDownload() {
+    if (this.downloadUrl) {
+      URL.revokeObjectURL(this.downloadUrl);
+      this.downloadUrl = null;
+    }
+    if (!this.downloadLink) return;
+    this.downloadLink.classList.remove("mosaic__download--visible");
+    this.downloadLink.removeAttribute("href");
+  }
+
+  offerDownload(canvas, token) {
+    if (!this.downloadLink) return;
+
+    canvas.toBlob((blob) => {
+      if (!blob || token !== this.shownToken) return;
+      const url = URL.createObjectURL(blob);
+      this.downloadUrl = url;
+      this.downloadLink.href = url;
+      this.downloadLink.classList.add("mosaic__download--visible");
+    }, "image/png");
+  }
+
   async createSvgTile(width, height) {
     const svgData = `
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
@@ -252,28 +252,19 @@ class MosaicMaker {
     });
   }
 
-  /** Draws SVG tiles repeatedly across the canvas to form a grid. */
-  async generateTiles(
-    canvas,
-    context,
-    svgTile,
-    xCount,
-    yCount,
-    tileWidth,
-    tileHeight
-  ) {
-    for (let y = 0; y < yCount; y++) {
-      for (let x = 0; x < xCount; x++) {
-        context.drawImage(svgTile, x * tileWidth, y * tileHeight);
-      }
-    }
+  generateTiles(context, svgTile, width, height) {
+    const pattern = context.createPattern(svgTile, "repeat");
+    if (!pattern) throw new Error("Could not build a tile pattern.");
+    context.fillStyle = pattern;
+    context.fillRect(0, 0, width, height);
   }
 
   /**
-   * Applies the image's colors to the tiles using a blend mode.
-   * Uses a smaller canvas to scale down the image to fit the mosaic grid.
+   * source-in keeps the ellipse mask and replaces its colour with the photo.
+   * The downscale is smoothed so each tile gets an average; the scale-up is not,
+   * so tile edges stay sharp.
    */
-  async colourTiles(canvas, context, image, xTileCount, yTileCount) {
+  colourTiles(canvas, context, image, xTileCount, yTileCount) {
     context.globalCompositeOperation = "source-in";
 
     const smallCanvas = this.createCanvas(xTileCount, yTileCount);
@@ -281,7 +272,7 @@ class MosaicMaker {
 
     smallContext.drawImage(image, 0, 0, xTileCount, yTileCount);
 
-    context.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect scaling
+    context.imageSmoothingEnabled = false;
     context.scale(canvas.width / xTileCount, canvas.height / yTileCount);
     context.drawImage(smallCanvas, 0, 0);
   }
